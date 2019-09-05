@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cookie作业</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <script type="text/javascript">
+        window.onload = function () {
+            var cl = mangeCookie.getCookie('left')
+            var ct = mangeCookie.getCookie('top');
+            div.style.left = cl + 'px';
+            div.style.top = ct + 'px';
+            console.log(1);
+
+        }
+        var div = document.getElementsByTagName('div')[0];
+        div.onmousedown = function (e) {
+            e = e || event;
+            var disX = e.pageX - div.offsetLeft;
+            var disY = e.pageY - div.offsetTop;
+            document.onmousemove = function (e) {
+                e = e || event;
+                div.style.left = e.pageX - disX + 'px';
+                div.style.top = e.pageY - disY + 'px';
+
+            }
+
+            document.onmouseup = function (e) {
+                document.onmousemove = false;
+                document.onmouseup = false;
+                var left = div.offsetLeft;
+                var top = div.offsetTop;
+                console.log(left, top)
+                mangeCookie.setCookie('left', left, 10000)
+                    .setCookie('top', top, 10000)
+
+
+            }
+        }
+
+
+        var mangeCookie = {
+            setCookie: function (name, value, time) {
+                document.cookie = name + '=' + value + ';max-age=' + time;
+                return this;
+            },
+            removeCookie: function (name) {
+                return this.setCookie(name, '', -1);
+            },
+            getCookie: function (name) {
+                var allCookieArr = document.cookie.split('; ');
+                for (var i = 0; i < allCookieArr.length; i++) {
+                    var itemCookieArr = allCookieArr[i].split('=');
+                    if (itemCookieArr[0] == name) {
+                        return itemCookieArr[1];
+
+                    }
+                }
+
+            }
+        }
+    </script>
+</body>
+
+</html>
